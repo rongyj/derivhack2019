@@ -3,6 +3,7 @@
 
 import json
 import requests
+import uuid
 
 owner = "Alice"
 tokenHeader = { "Authorization" : """Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWRnZXJJZCI6ImhlbGxvY2RtIiwiYXBwbGljYXRpb25JZCI6ImZvb2JhciIsInBhcnR5IjoiQWxpY2UifQ.SY9x-Eh_mnPJwKzn4UXvHgtDSbFCRWZFqv0HgaGeXNI"""} #TODO: send meta static time
@@ -110,6 +111,7 @@ def exerciseChoice(contractIdToExerciseOn, choiceName, choiceArguments, httpEndp
 if __name__ == '__main__' : 
   print("#### Loading CDM JSON from 'CashTransfer.json' ####")
   cdmJson = loadCDMFile("CashTransfer.json")
+  cdmJson["meta"]["globalKey"] = str(uuid.uuid4()) # We overwrite the globalKey, to avoid DAML key clashes, allowing us to reload the same contract many times.
   print("Loaded the following JSON object:")
   print(cdmJson)
 
