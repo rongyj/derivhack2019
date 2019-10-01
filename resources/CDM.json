@@ -1,7 +1,7 @@
 {
     "metagen_version": "0.1",
     "format": "CDM",
-    "schema": "CDM_2.4.7",
+    "schema": "CDM_2.4.14",
     "top_level_meta": [],
     "declarations": [
         {
@@ -36800,19 +36800,6 @@
                     }
                 },
                 {
-                    "name": "equityCashSettlementAmount",
-                    "cardinality": "OPTIONAL",
-                    "meta": {
-                        "name": "equityCashSettlementAmount",
-                        "src": "field",
-                        "type": "number"
-                    },
-                    "type": {
-                        "kind": "prim",
-                        "name": "DECIMAL"
-                    }
-                },
-                {
                     "name": "meta",
                     "cardinality": "OPTIONAL",
                     "meta": {
@@ -37963,19 +37950,6 @@
                     }
                 },
                 {
-                    "name": "legalAgreementReference",
-                    "cardinality": "MANY",
-                    "meta": {
-                        "name": "legalAgreementReference",
-                        "src": "field",
-                        "type": "LegalAgreement"
-                    },
-                    "type": {
-                        "kind": "record",
-                        "name": "ReferenceWithMeta_LegalAgreement"
-                    }
-                },
-                {
                     "name": "meta",
                     "cardinality": "OPTIONAL",
                     "meta": {
@@ -37998,7 +37972,7 @@
                     },
                     "type": {
                         "kind": "record",
-                        "name": "Party"
+                        "name": "ReferenceWithMeta_Party"
                     }
                 },
                 {
@@ -43525,6 +43499,19 @@
                     "type": {
                         "kind": "record",
                         "name": "ReferenceWithMeta_PortfolioState"
+                    }
+                },
+                {
+                    "name": "transferReference",
+                    "cardinality": "MANY",
+                    "meta": {
+                        "name": "transferReference",
+                        "src": "field",
+                        "type": "TransferPrimitive"
+                    },
+                    "type": {
+                        "kind": "record",
+                        "name": "ReferenceWithMeta_TransferPrimitive"
                     }
                 }
             ]
@@ -49092,6 +49079,19 @@
             "name": "Position",
             "fields": [
                 {
+                    "name": "cashBalance",
+                    "cardinality": "OPTIONAL",
+                    "meta": {
+                        "name": "cashBalance",
+                        "src": "field",
+                        "type": "Money"
+                    },
+                    "type": {
+                        "kind": "record",
+                        "name": "Money"
+                    }
+                },
+                {
                     "name": "contractReference",
                     "cardinality": "OPTIONAL",
                     "meta": {
@@ -50377,6 +50377,19 @@
                     "type": {
                         "kind": "record",
                         "name": "FxLinkedNotionalSchedule"
+                    }
+                },
+                {
+                    "name": "multiplierValue",
+                    "cardinality": "SINGLE",
+                    "meta": {
+                        "name": "multiplierValue",
+                        "src": "field",
+                        "type": "number"
+                    },
+                    "type": {
+                        "kind": "prim",
+                        "name": "DECIMAL"
                     }
                 }
             ]
