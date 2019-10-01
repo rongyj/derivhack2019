@@ -41,6 +41,8 @@ pipenv run python python/bot.py &
 pipenv run python python/main.py
 ```
 
+One of the scripts will emit a `A command submission failed!` message - this is because the two processes are racing to update the contract simultaneously; see the tutorial below for further explanation.
+
 You can now run the reporting UI against the ledger by following the instructions [here](ui/).
 
 ## Tutorial
@@ -129,6 +131,8 @@ Now let's have a look at `python/main.py`. It has four methods which correspond 
 Loaded the following JSON object:
 {'action': 'NEW', 'eventDate': {'day': 20, 'month': 3, 'year': 2018}, 'eventEffect': {'transfer': [{'globalReference': '69e7b2f5'}]}, 'eventIdentifier': [{'assignedIdentifier': [{'identifier': {'value': 'payment-1'}, 'version': 1}], 'issuerReference': {'globalReference': 'baa9cf67', 'externalReference': 'party1'}, 'meta': {'globalKey': '4576e46b'}}], 'eventQualifier': 'CashTransfer', 'messageInformation': {'messageId': {'value': '1486297', 'meta': {'scheme': 'http://www.party1.com/message-id'}}, 'sentBy': {'value': '894500DM8LVOSCMP9T34'}, 'sentTo': [{'value': '49300JZDC6K840D7F79'}]}, 'meta': {'globalKey': '14801403'}, 'party': [{'meta': {'globalKey': 'baa9cf67', 'externalKey': 'party1'}, 'partyId': [{'value': '894500DM8LVOSCMP9T34', 'meta': {'scheme': 'http://www.fpml.org/coding-scheme/external/iso17442'}}]}, {'meta': {'globalKey': 'a275c2fe', 'externalKey': 'party2'}, 'partyId': [{'value': '549300JZDC6K840D7F79', 'meta': {'scheme': 'http://www.fpml.org/coding-scheme/external/iso17442'}}]}], 'primitive': {'transfer': [{'cashTransfer': [{'amount': {'amount': 1480, 'currency': {'value': 'USD'}, 'meta': {'globalKey': '7c20311f'}}, 'payerReceiver': {'payerPartyReference': {'globalReference': 'baa9cf67', 'externalReference': 'party1'}, 'receiverPartyReference': {'globalReference': 'a275c2fe', 'externalReference': 'party2'}}}], 'meta': {'globalKey': '69e7b2f5'}, 'settlementDate': {'adjustedDate': {'value': {'day': 22, 'month': 3, 'year': 2018}}}}]}, 'timestamp': [{'dateTime': '2018-03-20T18:13:51Z', 'qualification': 'EVENT_CREATION_DATE_TIME'}]}
 ```
+
+As a side note, we mention that we override the `meta.globalKey` in posterity to avoid key clashes when creating new contracts from the main script.
 
 2. `convertCDMJsonToAdmlJson` changes the schema from the official CDM to be compatible with the ledger HTTP API. Running this would output the following:
 
@@ -255,22 +259,14 @@ Tried to send a command and failed!
 
 The bot checks to see whether it's already greeted each contract (the id should equal "Hello, CDM!" in this case), and if not, it updates it.
 
-Curiously, you'll note that the last line says "Tried to send a command and failed!". Your script may spew a lot of output and go into an infinite loop.
+Curiously, you'll note that the last line says `Tried to send a command and failed!`. Your script may spew a lot of output or go into an infinite loop.
 The reason for this is that _both_ our `main.py` and the `bot.py` are racing to update the same contract. To resolve this, comment out the lines related to
 
 ```python
 httpExerciseResponse = exerciseChoice(...)
 ```
 
-in the main script, and change the global key in `CashTransfer.json` to something else, to create a unique record:
-
-```json
-  "meta": {
-    "globalKey": "14801403"
-  },
-```
-
-Now run the main script again. It should now work correctly.
+Now run the main script again. It should work without errors.
 
 ### Reporting UI
 
