@@ -1,0 +1,169 @@
+daml 1.2
+module Test where
+
+import DA.Date as D
+import DA.Time as T
+import Org.Isda.Cdm.Classes as Cdm
+import Org.Isda.Cdm.Enums
+import Org.Isda.Cdm.MetaClasses
+import Org.Isda.Cdm.MetaFields
+import Org.Isda.Cdm.ZonedDateTime
+import Main as M
+import Prelude as P
+
+buildTransfer : Decimal -> Cdm.Event
+buildTransfer amount =
+  setGlobalKey $ Cdm.Event with 
+    account = []
+    action = ActionEnum_New
+    effectiveDate = None
+    eventDate = D.date 2018 Mar 20
+    eventEffect = Some EventEffect with
+      contract = []
+      effectedContract = []
+      effectedExecution = []
+      execution = []
+      productIdentifier = []
+      transfer =
+        [ ReferenceWithMeta with
+            globalReference = Some "69e7b2f5"
+            externalReference = None
+            value = None
+            meta = None
+        ]
+    eventIdentifier =
+      [ Identifier with
+          assignedIdentifier =
+            [ AssignedIdentifier with
+                identifier = FieldWithMeta with
+                  value = "payment-1"
+                  meta = None
+                version = Some 1
+            ]
+          issuer = None 
+          issuerReference = Some ReferenceWithMeta with
+            globalReference = Some "baa9cf67"
+            externalReference = Some "party1"
+            value = None
+            meta = None
+          meta = Some MetaFields with
+            reference = None
+            scheme = None
+            id = None
+            globalKey = Some "4576e46b"
+            externalKey = None
+      ]
+    eventQualifier = Some "CashTransfer"
+    eventWorkflow = None
+    functionCall = None
+    intent = None
+    lineage = None
+    messageInformation = None
+    meta = None
+    party = 
+      [ Party with
+          account = None
+          meta = Some MetaFields with
+            reference = None
+            scheme = None
+            id = None
+            globalKey = Some "baa9cf67"
+            externalKey = Some "party1"
+          name = None
+          partyId = 
+            [ FieldWithMeta with
+                value = "894500DM8LVOSCMP9T34"
+                meta = None
+            ]
+          person = []
+      , Party with
+          account = None
+          meta = Some MetaFields with
+            reference = None
+            scheme = None
+            id = None
+            globalKey = Some "a275c2fe"
+            externalKey = Some "party2"
+          name = None
+          partyId = 
+            [ FieldWithMeta with
+                value = "549300JZDC6K840D7F79"
+                meta = None
+            ]
+          person = []
+      ]
+    primitive = PrimitiveEvent with
+      allocation = []
+      contractFormation = []
+      execution = []
+      exercise = None
+      inception = []
+      observation = []
+      quantityChange = []
+      reset = []
+      termsChange= None
+      transfer =
+        [ TransferPrimitive with
+            cashTransfer =
+              [ CashTransferComponent with
+                  amount = Money with
+                    amount = amount
+                    currency = FieldWithMeta with
+                      value = "USD"
+                      meta = None
+                    meta = None
+                  breakdown = []
+                  cashflowType = None
+                  identifier = None
+                  payerReceiver = PayerReceiver with
+                      payerAccountReference = None
+                      payerPartyReference = ReferenceWithMeta with
+                        globalReference = Some "baa9cf67"
+                        externalReference = Some "party1"
+                        value = None
+                        meta = None
+                      receiverAccountReference = None
+                      receiverPartyReference = ReferenceWithMeta with
+                        globalReference = Some "a275c2fe"
+                        externalReference = Some "party2"
+                        value = None
+                        meta = None
+                  transferCalculation = None
+              ]
+            commodityTransfer = []
+            identifier = None
+            meta = Some MetaFields with
+              reference = None
+              scheme = None
+              id = None
+              globalKey = Some "69e7b2f5"
+              externalKey = None
+            securityTransfer = []
+            settlementDate = AdjustableOrAdjustedOrRelativeDate with
+              adjustedDate = Some FieldWithMeta with
+                value = D.date 2018 Mar 22
+                meta = None
+              dateAdjustments = None
+              relativeDate = None
+              unadjustedDate = None
+            settlementReference = None
+            settlementType = None
+            status = None
+        ]
+    timestamp = 
+      [ EventTimestamp with
+          dateTime = ZonedDateTime with
+            dateTime = T.time (D.date 2018 Mar 20) 18 13 51
+            timezone = "UTC"
+          qualification = EventTimestampQualificationEnum_eventCreationDateTime
+      ]
+
+test = scenario do
+  alice <- getParty "Alice"
+  bob <- getParty "Bob"
+
+  let transfer = buildTransfer 100.0
+  tCid <- submit alice do create M.Transfer with event = transfer, owner = alice, obs = bob
+  tCid <- submit alice do P.exercise tCid SayHello with whomToGreet = "Bob"
+
+  return ()

@@ -1,0 +1,56 @@
+-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
+-- SPDX-License-Identifier: Apache-2.0
+
+daml 1.2
+module Scenarios where
+
+import Main
+import Fix5
+import DA.Date
+
+setup = scenario do
+  client <- getParty "client"
+  broker <- getParty "broker"
+  allocId <- submit client do 
+    create ProposeBilateralAllocation with
+      initiator = client
+      responder = broker
+      instruction = AllocationInstruction with
+        allocID = "" 
+        allocTransType = New 
+        allocType = Preliminary 
+        refAllocID = None
+        allocCancReplaceReason = None
+        ordAllocGrp = []
+        side = Buy
+        instrument = Instrument with
+          symbol = "BARC"
+          securityID = "GB0031348658"
+          securityIDSource = "ISIN"
+        avgPx = 140.52
+        quantity = 100_000
+        tradeDate = date 2019 Sep 6
+        settlDate = date 2019 Sep 10
+        allocGrp = 
+          [
+            AllocGrp with
+              allocAccount = "Account1"
+              allocPrice = 140.52 -- GBX
+              allocQty = 100_000
+              parties = 
+                [
+                  Parties with
+                    partyID = "client" 
+                    partyIDSource = "LEI" 
+                    partyRole = ClientID 
+                  ,
+                  Parties with
+                    partyID = "broker" 
+                    partyIDSource = "LEI" 
+                    partyRole = ExecutingFirm
+                ]
+              allocNetMoney = 14_052_000.0 -- GBX
+              allocSettlCurrAmt = 140_520.0
+              allocSettlCurr = "GBP"
+          ]
+  submit broker do exercise allocId Affirm

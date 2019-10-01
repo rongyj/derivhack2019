@@ -1,0 +1,10 @@
+sdk-version: 0.13.27
+name: hellocdm
+source: daml
+parties:
+  - Alice
+  - Bob
+version: 0.0.1
+dependencies:
+  - daml-prim
+  - daml-stdlib

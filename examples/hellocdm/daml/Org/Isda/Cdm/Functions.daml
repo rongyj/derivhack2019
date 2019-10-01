@@ -1,0 +1,599 @@
+daml 1.2
+
+-- | This file is auto-generated from the ISDA Common
+--   Domain Model, do not edit.
+--   @version 2.4.14
+module Org.Isda.Cdm.Functions
+  ( module Org.Isda.Cdm.Functions ) where
+
+import Org.Isda.Cdm.Classes
+import Org.Isda.Cdm.Enums
+import Org.Isda.Cdm.ZonedDateTime
+import Org.Isda.Cdm.MetaClasses
+import Org.Isda.Cdm.MetaFields
+import Prelude hiding (Party, exercise, id, product, agreement)
+
+-- | Function argument object definition for Abs
+data AbsSpec = AbsSpec with
+  x : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Abs
+absFunc : (AbsSpec -> Decimal) -> AbsSpec -> Decimal
+absFunc impl spec = impl spec
+
+-- | Function argument object definition for Allocate
+data AllocateSpec = AllocateSpec with
+  execution : Execution
+  allocationInstructions : AllocationInstructions
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Allocate
+allocateFunc : (AllocateSpec -> Event) -> AllocateSpec -> Event
+allocateFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   CalculationPeriod
+data CalculationPeriodSpec = CalculationPeriodSpec with
+  calculationPeriodDates : CalculationPeriodDates
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for CalculationPeriod
+calculationPeriodFunc : (CalculationPeriodSpec -> CalculationPeriodData) -> CalculationPeriodSpec -> CalculationPeriodData
+calculationPeriodFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   DayCountFraction
+data DayCountFractionSpec = DayCountFractionSpec with
+  interestRatePayout : InterestRatePayout
+  dayCountFractionEnum : DayCountFractionEnum
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for DayCountFraction
+dayCountFractionFunc : (DayCountFractionSpec -> Decimal) -> DayCountFractionSpec -> Decimal
+dayCountFractionFunc impl spec = impl spec
+
+
+
+
+
+
+
+
+
+
+-- | Function argument object definition for Equals
+data EqualsSpec = EqualsSpec with
+  contractualQuantity : ContractualQuantity
+  scalar : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Equals
+equalsFunc : (EqualsSpec -> Bool) -> EqualsSpec -> Bool
+equalsFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   EquityAmountPayer
+data EquityAmountPayerSpec = EquityAmountPayerSpec with
+  equityPayout : EquityPayout
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EquityAmountPayer
+equityAmountPayerFunc : (EquityAmountPayerSpec -> PayerReceiver) -> EquityAmountPayerSpec -> PayerReceiver
+equityAmountPayerFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   EquityCashSettlementAmount
+data EquityCashSettlementAmountSpec = EquityCashSettlementAmountSpec with
+  contractState : ContractState
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EquityCashSettlementAmount
+equityCashSettlementAmountFunc : (EquityCashSettlementAmountSpec -> Money) -> EquityCashSettlementAmountSpec -> Money
+equityCashSettlementAmountFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   EquityNotionalAmount
+data EquityNotionalAmountSpec = EquityNotionalAmountSpec with
+  numberOfSecurities : Quantity
+  price : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EquityNotionalAmount
+equityNotionalAmountFunc : (EquityNotionalAmountSpec -> Decimal) -> EquityNotionalAmountSpec -> Decimal
+equityNotionalAmountFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   EquityPerformance
+data EquityPerformanceSpec = EquityPerformanceSpec with
+  equityPayout : EquityPayout
+  observation : Decimal
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EquityPerformance
+equityPerformanceFunc : (EquityPerformanceSpec -> Decimal) -> EquityPerformanceSpec -> Decimal
+equityPerformanceFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   EquityPriceObservation
+data EquityPriceObservationSpec = EquityPriceObservationSpec with
+  equity : Equity
+  valuationDate : AdjustableOrRelativeDate
+  valuationTime : Optional BusinessCenterTime
+  timeType : Optional TimeTypeEnum
+  determinationMethod : DeterminationMethodEnum
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EquityPriceObservation
+equityPriceObservationFunc : (EquityPriceObservationSpec -> ObservationPrimitive) -> EquityPriceObservationSpec -> ObservationPrimitive
+equityPriceObservationFunc impl spec = impl spec
+
+-- | Function argument object definition for EquitySpot
+data EquitySpotSpec = EquitySpotSpec with
+  equity : Equity
+  date : Date
+  time : TimeZone
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EquitySpot
+equitySpotFunc : (EquitySpotSpec -> Decimal) -> EquitySpotSpec -> Decimal
+equitySpotFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   EvaluatePortfolioState
+data EvaluatePortfolioStateSpec = EvaluatePortfolioStateSpec with
+  portfolio : Portfolio
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for EvaluatePortfolioState
+evaluatePortfolioStateFunc : (EvaluatePortfolioStateSpec -> PortfolioState) -> EvaluatePortfolioStateSpec -> PortfolioState
+evaluatePortfolioStateFunc impl spec = impl spec
+
+-- | Function argument object definition for Execute
+data ExecuteSpec = ExecuteSpec with
+  product : Product
+  quantity : ExecutionQuantity
+  partyA : Party
+  partyB : Party
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Execute
+executeFunc : (ExecuteSpec -> Event) -> ExecuteSpec -> Event
+executeFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ExtractContractState
+data ExtractContractStateSpec = ExtractContractStateSpec with
+  event : Event
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ExtractContractState
+extractContractStateFunc : (ExtractContractStateSpec -> ContractState) -> ExtractContractStateSpec -> ContractState
+extractContractStateFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ExtractQuantity
+data ExtractQuantitySpec = ExtractQuantitySpec with
+  trade : Trade
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ExtractQuantity
+extractQuantityFunc : (ExtractQuantitySpec -> ContractualQuantity) -> ExtractQuantitySpec -> ContractualQuantity
+extractQuantityFunc impl spec = impl spec
+
+-- | Function argument object definition for FixedAmount
+data FixedAmountSpec = FixedAmountSpec with
+  interestRatePayout : InterestRatePayout
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for FixedAmount
+fixedAmountFunc : (FixedAmountSpec -> Decimal) -> FixedAmountSpec -> Decimal
+fixedAmountFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   FloatingAmount
+data FloatingAmountSpec = FloatingAmountSpec with
+  interestRatePayout : InterestRatePayout
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for FloatingAmount
+floatingAmountFunc : (FloatingAmountSpec -> Decimal) -> FloatingAmountSpec -> Decimal
+floatingAmountFunc impl spec = impl spec
+
+-- | Function argument object definition for FormContract
+data FormContractSpec = FormContractSpec with
+  executionEvent : Event
+  legalAgreement : Optional LegalAgreement
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for FormContract
+formContractFunc : (FormContractSpec -> Event) -> FormContractSpec -> Event
+formContractFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   FxMarkToMarket
+data FxMarkToMarketSpec = FxMarkToMarketSpec with
+  forwardPayout : ForwardPayout
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for FxMarkToMarket
+fxMarkToMarketFunc : (FxMarkToMarketSpec -> Decimal) -> FxMarkToMarketSpec -> Decimal
+fxMarkToMarketFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   GetRateSchedule
+data GetRateScheduleSpec = GetRateScheduleSpec with
+  floatingRateCalculation : FloatingRateSpecification
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for GetRateSchedule
+getRateScheduleFunc : (GetRateScheduleSpec -> SpreadSchedule) -> GetRateScheduleSpec -> SpreadSchedule
+getRateScheduleFunc impl spec = impl spec
+
+-- | Function argument object definition for GreaterThan
+data GreaterThanSpec = GreaterThanSpec with
+  contractualQuantity : ContractualQuantity
+  scalar : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for GreaterThan
+greaterThanFunc : (GreaterThanSpec -> Bool) -> GreaterThanSpec -> Bool
+greaterThanFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   GreaterThanEquals
+data GreaterThanEqualsSpec = GreaterThanEqualsSpec with
+  contractualQuantity : ContractualQuantity
+  scalar : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for GreaterThanEquals
+greaterThanEqualsFunc : (GreaterThanEqualsSpec -> Bool) -> GreaterThanEqualsSpec -> Bool
+greaterThanEqualsFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   InterpolateForwardRate
+data InterpolateForwardRateSpec = InterpolateForwardRateSpec with
+  forward : ForwardPayout
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for InterpolateForwardRate
+interpolateForwardRateFunc : (InterpolateForwardRateSpec -> Decimal) -> InterpolateForwardRateSpec -> Decimal
+interpolateForwardRateFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewAllocationPrimitive
+data NewAllocationPrimitiveSpec = NewAllocationPrimitiveSpec with
+  execution : Execution
+  allocationInstructions : AllocationInstructions
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewAllocationPrimitive
+newAllocationPrimitiveFunc : (NewAllocationPrimitiveSpec -> AllocationPrimitive) -> NewAllocationPrimitiveSpec -> AllocationPrimitive
+newAllocationPrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewCashTransferPrimitive
+data NewCashTransferPrimitiveSpec = NewCashTransferPrimitiveSpec with
+  contractState : ContractState
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewCashTransferPrimitive
+newCashTransferPrimitiveFunc : (NewCashTransferPrimitiveSpec -> TransferPrimitive) -> NewCashTransferPrimitiveSpec -> TransferPrimitive
+newCashTransferPrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewContractFormationPrimitive
+data NewContractFormationPrimitiveSpec = NewContractFormationPrimitiveSpec with
+  executionState : ExecutionState
+  parties : Party
+  legalAgreement : Optional LegalAgreement
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewContractFormationPrimitive
+newContractFormationPrimitiveFunc : (NewContractFormationPrimitiveSpec -> ContractFormation) -> NewContractFormationPrimitiveSpec -> ContractFormation
+newContractFormationPrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewEquitySwapProduct
+data NewEquitySwapProductSpec = NewEquitySwapProductSpec with
+  underlier : Equity
+  masterConfirmation : Optional EquitySwapMasterConfirmation2018
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewEquitySwapProduct
+newEquitySwapProductFunc : (NewEquitySwapProductSpec -> Product) -> NewEquitySwapProductSpec -> Product
+newEquitySwapProductFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewExecutionPrimitive
+data NewExecutionPrimitiveSpec = NewExecutionPrimitiveSpec with
+  product : Product
+  partyA : Party
+  partyB : Party
+  quantity : ExecutionQuantity
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewExecutionPrimitive
+newExecutionPrimitiveFunc : (NewExecutionPrimitiveSpec -> ExecutionPrimitive) -> NewExecutionPrimitiveSpec -> ExecutionPrimitive
+newExecutionPrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewFloatingPayout
+data NewFloatingPayoutSpec = NewFloatingPayoutSpec with
+  masterConfirmation : Optional EquitySwapMasterConfirmation2018
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewFloatingPayout
+newFloatingPayoutFunc : (NewFloatingPayoutSpec -> InterestRatePayout) -> NewFloatingPayoutSpec -> InterestRatePayout
+newFloatingPayoutFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewQuantityChangePrimitive
+data NewQuantityChangePrimitiveSpec = NewQuantityChangePrimitiveSpec with
+  trade : Trade
+  quantityChange : ContractualQuantity
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewQuantityChangePrimitive
+newQuantityChangePrimitiveFunc : (NewQuantityChangePrimitiveSpec -> QuantityChangePrimitive) -> NewQuantityChangePrimitiveSpec -> QuantityChangePrimitive
+newQuantityChangePrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewResetPrimitive
+data NewResetPrimitiveSpec = NewResetPrimitiveSpec with
+  contractState : ContractState
+  observation : ObservationPrimitive
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewResetPrimitive
+newResetPrimitiveFunc : (NewResetPrimitiveSpec -> ResetPrimitive) -> NewResetPrimitiveSpec -> ResetPrimitive
+newResetPrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewSingleNameEquityPayout
+data NewSingleNameEquityPayoutSpec = NewSingleNameEquityPayoutSpec with
+  underlier : Equity
+  masterConfirmation : Optional EquitySwapMasterConfirmation2018
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewSingleNameEquityPayout
+newSingleNameEquityPayoutFunc : (NewSingleNameEquityPayoutSpec -> EquityPayout) -> NewSingleNameEquityPayoutSpec -> EquityPayout
+newSingleNameEquityPayoutFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   NewTransferPrimitive
+data NewTransferPrimitiveSpec = NewTransferPrimitiveSpec with
+  execution : Execution
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for NewTransferPrimitive
+newTransferPrimitiveFunc : (NewTransferPrimitiveSpec -> TransferPrimitive) -> NewTransferPrimitiveSpec -> TransferPrimitive
+newTransferPrimitiveFunc impl spec = impl spec
+
+-- | Function argument object definition for PeriodsInYear
+data PeriodsInYearSpec = PeriodsInYearSpec with
+  frequency : CalculationPeriodFrequency
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for PeriodsInYear
+periodsInYearFunc : (PeriodsInYearSpec -> Int) -> PeriodsInYearSpec -> Int
+periodsInYearFunc impl spec = impl spec
+
+-- | Function argument object definition for Plus
+data PlusSpec = PlusSpec with
+  q1 : ContractualQuantity
+  q2 : ContractualQuantity
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Plus
+plusFunc : (PlusSpec -> ContractualQuantity) -> PlusSpec -> ContractualQuantity
+plusFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   QuantityEquals
+data QuantityEqualsSpec = QuantityEqualsSpec with
+  q1 : Quantity
+  q2 : Quantity
+  precision : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for QuantityEquals
+quantityEqualsFunc : (QuantityEqualsSpec -> Bool) -> QuantityEqualsSpec -> Bool
+quantityEqualsFunc impl spec = impl spec
+
+-- | Function argument object definition for RateOfReturn
+data RateOfReturnSpec = RateOfReturnSpec with
+  initialPrice : Decimal
+  finalPrice : Decimal
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for RateOfReturn
+rateOfReturnFunc : (RateOfReturnSpec -> Decimal) -> RateOfReturnSpec -> Decimal
+rateOfReturnFunc impl spec = impl spec
+
+-- | Function argument object definition for Reset
+data ResetSpec = ResetSpec with
+  previousEvent : Event
+  observationEvent : Event
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Reset
+resetFunc : (ResetSpec -> Event) -> ResetSpec -> Event
+resetFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveAdjustableDate
+data ResolveAdjustableDateSpec = ResolveAdjustableDateSpec with
+  terminationDate : AdjustableOrRelativeDate
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveAdjustableDate
+resolveAdjustableDateFunc : (ResolveAdjustableDateSpec -> Date) -> ResolveAdjustableDateSpec -> Date
+resolveAdjustableDateFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveCashSettlementDate
+data ResolveCashSettlementDateSpec = ResolveCashSettlementDateSpec with
+  contractState : ContractState
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveCashSettlementDate
+resolveCashSettlementDateFunc : (ResolveCashSettlementDateSpec -> Date) -> ResolveCashSettlementDateSpec -> Date
+resolveCashSettlementDateFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveCashflow
+data ResolveCashflowSpec = ResolveCashflowSpec with
+  contractState : ContractState
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveCashflow
+resolveCashflowFunc : (ResolveCashflowSpec -> Cashflow) -> ResolveCashflowSpec -> Cashflow
+resolveCashflowFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveEquityContract
+data ResolveEquityContractSpec = ResolveEquityContractSpec with
+  contractState : ContractState
+  observation : ObservationPrimitive
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveEquityContract
+resolveEquityContractFunc : (ResolveEquityContractSpec -> Contract) -> ResolveEquityContractSpec -> Contract
+resolveEquityContractFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveEquityPeriodEndPrice
+data ResolveEquityPeriodEndPriceSpec = ResolveEquityPeriodEndPriceSpec with
+  equityPayout : EquityPayout
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveEquityPeriodEndPrice
+resolveEquityPeriodEndPriceFunc : (ResolveEquityPeriodEndPriceSpec -> Decimal) -> ResolveEquityPeriodEndPriceSpec -> Decimal
+resolveEquityPeriodEndPriceFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveEquityPeriodStartPrice
+data ResolveEquityPeriodStartPriceSpec = ResolveEquityPeriodStartPriceSpec with
+  equityPayout : EquityPayout
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveEquityPeriodStartPrice
+resolveEquityPeriodStartPriceFunc : (ResolveEquityPeriodStartPriceSpec -> Decimal) -> ResolveEquityPeriodStartPriceSpec -> Decimal
+resolveEquityPeriodStartPriceFunc impl spec = impl spec
+
+-- | Function argument object definition for ResolvePrice
+data ResolvePriceSpec = ResolvePriceSpec with
+  equityValuation : EquityValuation
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolvePrice
+resolvePriceFunc : (ResolvePriceSpec -> Decimal) -> ResolvePriceSpec -> Decimal
+resolvePriceFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveQuantity
+data ResolveQuantitySpec = ResolveQuantitySpec with
+  resolvableQuantity : ResolvablePayoutQuantity
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveQuantity
+resolveQuantityFunc : (ResolveQuantitySpec -> Quantity) -> ResolveQuantitySpec -> Quantity
+resolveQuantityFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveRateIndex
+data ResolveRateIndexSpec = ResolveRateIndexSpec with
+  index : FloatingRateIndexEnum
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveRateIndex
+resolveRateIndexFunc : (ResolveRateIndexSpec -> Decimal) -> ResolveRateIndexSpec -> Decimal
+resolveRateIndexFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveTimeZoneFromTimeType
+data ResolveTimeZoneFromTimeTypeSpec = ResolveTimeZoneFromTimeTypeSpec with
+  timeType : TimeTypeEnum
+  determinationMethod : DeterminationMethodEnum
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveTimeZoneFromTimeType
+resolveTimeZoneFromTimeTypeFunc : (ResolveTimeZoneFromTimeTypeSpec -> TimeZone) -> ResolveTimeZoneFromTimeTypeSpec -> TimeZone
+resolveTimeZoneFromTimeTypeFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   ResolveUpdatedContract
+data ResolveUpdatedContractSpec = ResolveUpdatedContractSpec with
+  contractState : ContractState
+  observation : ObservationPrimitive
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ResolveUpdatedContract
+resolveUpdatedContractFunc : (ResolveUpdatedContractSpec -> Contract) -> ResolveUpdatedContractSpec -> Contract
+resolveUpdatedContractFunc impl spec = impl spec
+
+-- | Function argument object definition for Settle
+data SettleSpec = SettleSpec with
+  execution : Execution
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Settle
+settleFunc : (SettleSpec -> Event) -> SettleSpec -> Event
+settleFunc impl spec = impl spec
+
+-- | Function argument object definition for Sum
+data SumSpec = SumSpec with
+  quantities : Quantity
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for Sum
+sumFunc : (SumSpec -> Quantity) -> SumSpec -> Quantity
+sumFunc impl spec = impl spec
+
+-- | Function argument object definition for
+--   TimeZoneFromBusinessCenterTime
+data TimeZoneFromBusinessCenterTimeSpec = TimeZoneFromBusinessCenterTimeSpec with
+  time : BusinessCenterTime
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for
+--   TimeZoneFromBusinessCenterTime
+timeZoneFromBusinessCenterTimeFunc : (TimeZoneFromBusinessCenterTimeSpec -> TimeZone) -> TimeZoneFromBusinessCenterTimeSpec -> TimeZone
+timeZoneFromBusinessCenterTimeFunc impl spec = impl spec
+
+-- | Function argument object definition for ToDateTime
+data ToDateTimeSpec = ToDateTimeSpec with
+  date : Date
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for ToDateTime
+toDateTimeFunc : (ToDateTimeSpec -> ZonedDateTime) -> ToDateTimeSpec -> ZonedDateTime
+toDateTimeFunc impl spec = impl spec
+
+-- | Function argument object definition for TransferCash
+data TransferCashSpec = TransferCashSpec with
+  resetEvent : Event
+    deriving (Eq, Ord, Show)
+
+-- | Function definition for TransferCash
+transferCashFunc : (TransferCashSpec -> Event) -> TransferCashSpec -> Event
+transferCashFunc impl spec = impl spec
+

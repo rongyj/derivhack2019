@@ -1,0 +1,87 @@
+-- Copyright (c) 2019 The DAML Authors. All rights reserved.
+-- SPDX-License-Identifier: Apache-2.0
+
+daml 1.2
+module Main where
+
+import DA.List
+import DA.Optional
+import DA.Text
+import Org.Isda.Cdm.Classes qualified as CDM
+import Org.Isda.Cdm.MetaFields
+
+template Transfer
+  with
+    event : CDM.Event
+    owner : Party
+    obs   : Party
+  where
+    signatory owner
+    observer obs
+
+    key (owner, getGlobalKey event) : (Party, Text)
+    maintainer key._1
+
+    controller owner can
+      SayHello : ContractId Transfer 
+        with whomToGreet: Text
+        do -- Need to project deep field this.contract.eventIdentifier[0].assignedIdentifier[0].value and version
+          create this with event = updateIdentifier whomToGreet event
+
+-- Get Global Key
+getGlobalKey : CDM.Event -> Text
+getGlobalKey e =
+  let meta = fromSome e.meta
+  in fromSome meta.globalKey
+
+-- Set "Hello, ***!" as the id, and increment the version.
+updateIdentifier : Text -> CDM.Event -> CDM.Event
+updateIdentifier v e =
+  -- `map` applies a function to all elements in a list
+  e with eventIdentifier = map setIdentifier e.eventIdentifier 
+  where
+    setIdentifier idt = 
+      -- `head` returns the first element
+      let aIdt = head idt.assignedIdentifier
+      in idt with assignedIdentifier = [setAssignedIdentifier aIdt]
+    setAssignedIdentifier aIdt =
+          -- `fromSome` gets the optional value if `Some`, and throws an error if `None`
+          let versionOld = fromSome aIdt.version
+              version = Some (versionOld + 1)
+              identifier = aIdt.identifier with value = "Hello, " <> v <> "!"
+          in aIdt with                             
+              version
+              identifier
+-- Set Global Key
+setGlobalKey : CDM.Event -> CDM.Event
+setGlobalKey e =
+  let eTmp = e with meta = None
+      globalKey = (sha256 . show) eTmp
+  in e with meta = Some MetaFields with
+                          reference = None
+                          scheme = None
+                          id = None
+                          globalKey = Some globalKey
+                          externalKey = None
+
+template ShowPayerParty
+  with
+    sig   : Party
+    owner : Party
+    ref   : Text
+  where
+    signatory sig
+
+    controller sig can
+      ShowParty: Optional CDM.Party
+        do
+          (tCid, t) <- fetchByKey @Transfer (owner, ref)
+          return $ findPayerParty t.event
+
+-- Function to find payer Party
+findPayerParty : CDM.Event -> Optional CDM.Party
+findPayerParty e =
+  let t = head e.primitive.transfer
+      ct = head t.cashTransfer
+      pr = fromSome ct.payerReceiver.payerPartyReference.externalReference
+  in find (\p -> (fromSome p.meta).externalKey == Some pr) e.party

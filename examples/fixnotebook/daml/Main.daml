@@ -1,0 +1,85 @@
+-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
+-- SPDX-License-Identifier: Apache-2.0
+
+{- Throughout this model we assume that `Party`s on the ledger
+   correspond to LEI party identifiers in the FIX messages.
+ -}
+
+daml 1.2
+module Main where
+
+import Fix5
+import DA.List
+import DA.Record
+import DA.Optional
+
+template Execution
+  with
+    report: ExecutionReport
+    broker: Party
+  where
+    ensure [ broker ] == gatherParties ExecutingFirm [ report ]
+    signatory broker
+    observer gatherParties ClientID [ report ]
+
+-- Use to initate workflows
+template ProposeBilateralAllocation
+  with
+    initiator: Party
+    instruction: AllocationInstruction
+    responder: Party
+  where
+    ensure [ initiator ] == gatherParties ClientID instruction.allocGrp &&
+           [ responder ] == gatherParties ExecutingFirm instruction.allocGrp
+    signatory initiator
+    controller responder can
+      Affirm: ContractId BilateralAllocation
+        do 
+          create BilateralAllocation with
+            initiator
+            instruction 
+            responder
+            affirmation = AllocationInstructionAck with
+              allocID = show self
+              parties = instruction.allocGrp >>= (.parties)
+              allocStatus = Accepted
+              matchStatus = 
+                if instruction.allocType == Preliminary then Compared else AdvisoryOrAlert
+              allocAckGrp = []
+      Reject: ContractId BilateralAllocation
+        with rejects: [ AllocAckGrp ]
+        do 
+          create BilateralAllocation with
+            initiator
+            instruction
+            responder
+            affirmation = AllocationInstructionAck with
+              allocID = show self
+              parties = instruction.allocGrp >>= (.parties) --FIXME this should align wiht rejects
+              allocStatus = BlockLevelReject
+              matchStatus = Compared
+              allocAckGrp = rejects
+
+-- Represents a completed allocation workflow
+-- As it has multiple signatories it must be composed by embedding sub-contracts
+template BilateralAllocation
+  with 
+    initiator: Party
+    instruction: AllocationInstruction
+    responder: Party
+    affirmation: AllocationInstructionAck
+  where
+    ensure [ initiator ] == gatherParties ClientID instruction.allocGrp &&
+           [ responder ] == gatherParties ExecutingFirm [affirmation]
+    signatory [ initiator, responder ]
+
+-- Extracts unique parties from a list of records `r` with field `parties`.
+gatherParties : HasField "parties" r [Parties] => 
+  PartyRole -> [r] -> [Party]
+gatherParties role msgs = dedup sigs
+  where 
+    sigs = do
+      msg <- msgs
+      party <- msg.parties
+      _ <- guard (party.partyRole == role) 
+      optionalToList (partyFromText party.partyID)

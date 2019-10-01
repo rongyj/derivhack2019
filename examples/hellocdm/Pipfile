@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+dazl = "*"
+message_integration = {path = "./../../resources/message_integration-0.0.1-py3-none-any.whl"}
+python-dateutil = "*"
+requests = "*"
+
+[requires]
+python_version = "3.7"

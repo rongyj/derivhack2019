@@ -1,0 +1,136 @@
+-- Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
+-- SPDX-License-Identifier: Apache-2.0
+
+-- This file contains a subset of the FIX 5 protocol/schema.
+--
+-- Note repeating groups are handles as follows:
+-- * They are represented as lists in the data types.
+-- * The leading NoXXX field is implicit in the size of the list, and is 
+--   omitted from the body.
+--
+-- Enumerations are represented as data union types.
+
+daml 1.2
+module Fix5 where
+
+-- Orders/Executions -------------------------------------------
+
+-- This is a really cut-down version of the actual message
+data ExecutionReport =
+  ExecutionReport with
+    orderID: Text
+    parties: [Parties]
+    ordStatus: OrdStatus
+    tradeDate: Date
+    -- instrument: Instrument
+    -- lastPx: Decimal
+    -- lastQty: Int
+    avgPx: Decimal
+    cumQty: Int
+  deriving (Eq, Show)
+
+data OrdStatus = DoneForDay | Filled
+  deriving (Eq, Show)
+
+-- Allocations -------------------------------------------------
+
+data AllocationInstruction =
+  AllocationInstruction with 
+    allocID: Text
+    allocTransType: AllocTransType
+    allocType: AllocType
+    refAllocID: Optional Text
+    allocCancReplaceReason: Optional Text
+    ordAllocGrp: [OrdAllocGrp]
+    side: Side
+    instrument: Instrument
+    avgPx: Decimal
+    quantity: Int
+    tradeDate: Date
+    settlDate: Date
+    allocGrp: [AllocGrp]
+  deriving (Eq, Show)
+
+data AllocationInstructionAck =
+  AllocationInstructionAck with
+    allocID: Text
+    parties: [Parties]
+    allocStatus: AllocStatus
+    matchStatus: MatchStatus
+    allocAckGrp: [AllocAckGrp]
+  deriving (Eq, Show)
+
+data AllocTransType = New | Cancel | Replace
+  deriving (Eq, Show)
+
+data AllocType = Calculated | Preliminary | ReadyToBook | Warehouse
+  deriving (Eq, Show)
+
+data Side = Buy | Sell
+  deriving (Eq, Show)
+
+data AllocStatus = Accepted | BlockLevelReject | AccountLevelReject | Received
+  deriving (Eq, Show)
+
+data MatchStatus = Compared | Uncompared | AdvisoryOrAlert | Mismatched
+  deriving (Eq, Show)
+
+data OrdAllocGrp = 
+  OrdAllocGrp with
+    orderID: Text
+    -- parties: [Parties]
+    -- orderQty: Int
+    -- orderAvgPx: Decimal
+    -- orderBookingQty: Int
+  deriving (Eq, Show)
+
+data AllocGrp = 
+  AllocGrp with
+    allocAccount: Text
+    allocPrice: Decimal
+    allocQty: Int
+    parties: [Parties]
+    --commissionData: CommissionData
+    --allocAvgPrice
+    allocNetMoney: Decimal
+    allocSettlCurrAmt: Decimal
+    allocSettlCurr: Text
+    --miscFeesGrp: MiscFeesGrp
+    --settlInstructionsData: SettlInstructionsData
+  deriving (Eq, Show)
+
+data AllocAckGrp = 
+  AllocAckGrp with
+    allocAccount: Text
+    individualAllocRejCode: IndividualAllocRejCode
+  deriving (Eq, Show)
+
+data IndividualAllocRejCode = 
+  UnknownAccount | 
+  IncorrectQuantity |
+  IncorrectAveragePrice |
+  CommissionDifference
+  deriving (Eq, Show)
+
+ -- Common Component Blocks ------------------------------------
+
+data Instrument = 
+  Instrument with 
+    symbol: Text
+    securityID: Text
+    securityIDSource: Text
+  deriving (Eq, Show)
+
+-- Many messages use NestedParty, NestedParty2 - these are just workarounds
+-- as Fix can't serialize nested fields with the same name,.
+-- Note the type of `partyID` is `Text`, not a primitive DAML `Party`.
+-- the conversion is done in `signatory` directive in the tempaltes in Main.daml.
+data Parties = 
+  Parties with
+    partyID: Text
+    partyIDSource: Text
+    partyRole: PartyRole
+  deriving (Eq, Show)
+  
+data PartyRole = ExecutingFirm | ClientID
+  deriving (Eq, Show)
