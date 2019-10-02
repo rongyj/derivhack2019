@@ -35,9 +35,11 @@ Run the main program:
 pipenv run python python/main.py
 ```
 
-In another shell session, run the bot, and then ***re-run*** the main program to trigger some actions.
+In another shell session, run the bot, and then ***re-run*** the main program to trigger some actions:
 ```sh
-pipenv run python python/bot.py &
+pipenv run python python/bot.py
+```
+```sh
 pipenv run python python/main.py
 ```
 

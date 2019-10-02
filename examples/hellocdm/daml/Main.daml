@@ -73,7 +73,7 @@ template ShowPayerParty
     signatory sig
 
     controller sig can
-      ShowParty: Optional CDM.Party
+      nonconsuming ShowParty: Optional CDM.Party
         do
           (tCid, t) <- fetchByKey @Transfer (owner, ref)
           return $ findPayerParty t.event
