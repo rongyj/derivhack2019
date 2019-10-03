@@ -2,7 +2,7 @@ daml 1.2
 
 -- | This file is auto-generated from the ISDA Common
 --   Domain Model, do not edit.
---   @version 2.4.14
+--   @version 2.5.4
 module Org.Isda.Cdm.Functions
   ( module Org.Isda.Cdm.Functions ) where
 
@@ -26,6 +26,7 @@ absFunc impl spec = impl spec
 data AllocateSpec = AllocateSpec with
   execution : Execution
   allocationInstructions : AllocationInstructions
+  previousEvent : Event
     deriving (Eq, Ord, Show)
 
 -- | Function definition for Allocate
@@ -553,6 +554,7 @@ resolveUpdatedContractFunc impl spec = impl spec
 -- | Function argument object definition for Settle
 data SettleSpec = SettleSpec with
   execution : Execution
+  previousEvent : Event
     deriving (Eq, Ord, Show)
 
 -- | Function definition for Settle
