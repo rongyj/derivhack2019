@@ -6,7 +6,7 @@ This project shows you how to write a simple 'hello world' application that load
 * [DAML SDK](https://docs.daml.com/getting-started/installation.html)
 * [Python 3.7](https://www.python.org/downloads/)
 * [Pipenv](https://pipenv.kennethreitz.org/en/latest/install/#installing-pipenv)
-* [Yarn](https://yarnpkg.com/lang/en/docs/install/)
+* [Yarn](https://yarnpkg.com/lang/en/docs/install/) (Only required for react UI)
 
 ## Quickstart
 
@@ -49,7 +49,7 @@ You can now run the reporting UI against the ledger by following the instruction
 
 ## Tutorial
 
-In this section we are going to walk through the app step-by-step.
+In this section we are going to walk through the app step-by-step. This is also available as a [video recording](https://youtu.be/YRrXoD_wabk).
 
 ### Loading the DAML model onto a local ledger
 
@@ -124,9 +124,9 @@ Note the `--max-inbound-message-size`, which we require, to be able to process C
 
 ### Talking CDM with the ledger
 
-Now let's have a look at `python/main.py`. It has four methods which correspond to these four steps:
+Now let's have a look at `python/main.py`. It has five methods which correspond to these four steps:
 
-1. `loadCDMFile` simply opens the `Event.json` file and loads it into a python dictionary. This file would be provided to you in the Hackathon. When this is run in the script, it outputs something like this:
+1. `loadCDMFile` simply opens the `CashTransfer.json` file and loads it into a python dictionary. This file would be provided to you in the Hackathon. When this is run in the script, it outputs something like this:
 
 ```json
 #### Loading CDM JSON from 'CashTransfer.json' ####
@@ -172,7 +172,7 @@ There is also a `meta.ledgerEffectiveTime` member which is not required for the 
 
 Finally, the `argument` is the DAML-encoded CDM message we created in the previous section.
 
-This returns an `HttpResponse` object, which is rendered as the HTTP 200 response code, if everything worked ok.
+This returns an `HttpResponse` object, which is rendered as the HTTP 200 response code, if everything worked ok. If the call fails, you can call `httpCreateResponse.json()` to render and debug the result.
 
 4. `readDAMLJsonFromLedger` is similar to the previous method. Reads the contracts we just generated back from the sandbox. It posts an argument `%templates` to the HTTP endpoint, which can be used to filter specific types of contracts:
 
@@ -190,7 +190,7 @@ requests.post(
   )
 ```
 
-5. `exerciseChoice` is the final step and is used to exercise the `SayHello` choice on our contract. Again, it's very similar to the other HTTP calls. Besides the aforementioned header and meta blocks, it requires a `contractId`, `choice` and `argument` to pass to the DAML choice. In our example, the choice is `SayHello`, and the argument is the greeting message. The script calls this with `World`, to update the contract identifier to "Hello, World!".
+5. `exerciseChoice` is the final step and is used to exercise the `SayHello` choice on our contract.  Recall this updates the contract identifier to `Hello, ____!` and increments the `version` number. Again, it's very similar to the other HTTP calls. Besides the aforementioned header and meta blocks, it requires a `contractId`, `choice` and `argument` to pass to the DAML choice. In our example, the choice is `SayHello`, and the argument is the greeting message.
 
 ```python
   return requests.post(
@@ -215,7 +215,7 @@ You should see some output from each step as it's executed, showing the HTTP res
 
 ### Workflow Automation
 
-We now turn to the file `python/bot.py` which shows how to automate workflows. It uses the python [DAZL](https://github.com/lucianojoublanc-da/dazl-client) API to talk directly to the ledger, instead of making HTTP calls. 
+We now turn to the file `python/bot.py` which shows how to automate workflows. It uses the python [DAZL](https://github.com/lucianojoublanc-da/dazl-client) API ([docs](https://lucianojoublanc-da.github.io/dazl-client/dazl.client.html#module-dazl.client.api)) to talk directly to the ledger, instead of making HTTP calls. 
 
 You'll see the file has two annotated methods, which register callbacks:
 
