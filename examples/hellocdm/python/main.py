@@ -68,25 +68,25 @@ def readDAMLJsonFromLedger(contractName, signatoryName, httpEndpointPrefix):
     httpEndpointPrefix + "/contracts/search",
     headers = tokenHeader,
     json = {
-      "%templates" : [ 
+      "%templates" : [
         {
           "moduleName" : "Main",
-          "entityName" : contractName 
+          "entityName" : contractName
         }
       ]
     }
   )
-  
+
   if response.status_code == 200:
-    response.contract = response.json()["result"][0]["activeContracts"][0]["argument"]
-    response.contractId = response.json()["result"][0]["activeContracts"][0]["contractId"]
+    response.contract = response.json()["result"][0]["argument"]
+    response.contractId = response.json()["result"][0]["contractId"]
 
   return response
 
 def exerciseChoice(contractIdToExerciseOn, choiceName, choiceArguments, httpEndpointPrefix):
 
   """Exercises 'SayHello' on a CashTransfer contract.
-  This sets the `contract.eventIdentifier.assignedIdentifier.identifier.value` 
+  This sets the `contract.eventIdentifier.assignedIdentifier.identifier.value`
   to the given text, and increments the `version` by one.
   Return the updated contract:
   """
@@ -108,7 +108,7 @@ def exerciseChoice(contractIdToExerciseOn, choiceName, choiceArguments, httpEndp
     }
   )
 
-if __name__ == '__main__' : 
+if __name__ == '__main__' :
   print("#### Loading CDM JSON from 'CashTransfer.json' ####")
   cdmJson = loadCDMFile("CashTransfer.json")
   cdmJson["meta"]["globalKey"] = str(uuid.uuid4()) # We overwrite the globalKey, to avoid DAML key clashes, allowing us to reload the same contract many times.
