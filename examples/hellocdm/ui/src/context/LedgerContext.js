@@ -100,7 +100,7 @@ export async function fetchContracts(dispatch, token, setIsFetching, setError) {
       const response = await fetch("/contracts/search", options);
       const json = await response.json();
       if (json.status !== 200) throw new Error(json.errors);
-      const contracts = [].concat.apply([], json.result.map(c => c.activeContracts));
+      const contracts = [].concat.apply([], json.result);
       dispatch({ type: "CONTRACT_RESPONSE", contracts });
       setIsFetching(false);
     }
