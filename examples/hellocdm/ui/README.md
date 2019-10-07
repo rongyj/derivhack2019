@@ -34,13 +34,10 @@ By modifying this template application you can now create custom reports as requ
 
 Two changes are required once you've deployed your DAML application to the DABL cloud.
 
-1. In [src/config.js](src/config.js) you can specify the ledger ID of your deployed ledger, which you can obtain from the DABL settings page.
+1. You have to switch the `isLocalDev` flag to `false` and copy the tokens for each party into the `DABL config` section in [src/config.js](src/config.js), which you can obtain from the DABL Ledger Settings page for your ledger.
 
-2. You also have to switch the `isLocalDev` flag to `false` and copy the tokens for each party into the `DABL config` section in [src/config.js](src/config.js), which you can also obtain from the DABL settings page for your ledger.
-
-3. Finally, you'll need to change the `proxy` config entry in [package.json](package.json) to point to the DABL API endpoint, which is also listed on the DABL settings page for your ledger.
+2. Finally, you'll need to change the `proxy` config entry in [package.json](package.json) to point to the DABL API endpoint, which is also listed on the DABL Ledger Settings page for your ledger.
 
 You can now run `yarn start` again and your application will work against the deployed DABL ledger.
 
-Note that DABL uses obfuscated party names on the ledger, so you'll have to maintain a mapping between your defined party names and the DABL ones if you want to display parties in the UI. You can find out the mapping by looking at the `UserInfo` contracts in the DABL contracts view.
-
+Note that DABL uses obfuscated party names on the ledger, so you'll have to maintain a mapping between your defined party names and the DABL ones if you want to display parties in the UI. You can find out the mapping by looking at the `DABL.User:UserParty` contracts in the DABL Live Data view or copy the obfuscated party names to your clipboard from the DABL Ledger Settings.
