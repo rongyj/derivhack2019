@@ -32,11 +32,13 @@ By modifying this template application you can now create custom reports as requ
 
 ## Running against DABL
 
-Two changes are required once you've deployed your DAML application to the DABL cloud.
+Three changes are required once you've deployed your DAML application to the DABL cloud.
 
 1. You have to switch the `isLocalDev` flag to `false` and copy the tokens for each party into the `DABL config` section in [src/config.js](src/config.js), which you can obtain from the DABL Ledger Settings page for your ledger.
 
-2. Finally, you'll need to change the `proxy` config entry in [package.json](package.json) to point to the DABL API endpoint, which is also listed on the DABL Ledger Settings page for your ledger.
+2. You will need to copy the JWT tokens from DABL Ledger Settings for the parties you would like to use and paste them in the `dablConfig.tokens` object in [src/config.js](src/config.js)
+
+3. Finally, you'll need to change the `proxy` config entry in [package.json](package.json) to point to the DABL API endpoint, which is also listed on the DABL Ledger Settings page for your ledger.
 
 You can now run `yarn start` again and your application will work against the deployed DABL ledger.
 

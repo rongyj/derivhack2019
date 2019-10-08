@@ -39,7 +39,7 @@ def main():
 
   url = localEndpoint if isLocalDev else os.getenv('DAML_LEDGER_URL')
 
-  print(f'Starting a ledger for party {ownerParty!r} ({owner}) on {url}...')
+  print(f'Starting a ledger client for party {ownerParty!r} ({owner}) on {url}...')
   network = dazl.Network()
   network.set_config(url=url)
   clientOwner = network.aio_party(ownerParty)

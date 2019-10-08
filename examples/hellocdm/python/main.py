@@ -198,8 +198,6 @@ if __name__ == '__main__' :
   print("HTTP service responded: {}".format(httpCreateResponse))
 
   if httpCreateResponse.status_code == 200:
-    if not isLocalDev:
-      time.sleep(2)  # since DABL responds asynchronously, Allow a couple of seconds before reading the data
     print("#### Reading back Transfer contracts from Ledger ####")
     httpContractsResponse = readDAMLJsonFromLedger("Transfer", owner, endpoint)
     print("HTTP service responded: {}".format(httpContractsResponse))
