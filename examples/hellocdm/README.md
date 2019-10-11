@@ -211,7 +211,7 @@ Note the `--max-inbound-message-size`, which we require, to be able to process C
 
 ### Talking CDM with the ledger
 
-Now let's have a look at `python/main.py`. It has five methods which correspond to these four steps:
+Now let's have a look at `python/main.py`. It has six methods which correspond to these steps:
 
 1. `loadCDMFile` simply opens the `CashTransfer.json` file and loads it into a python dictionary. This file would be provided to you in the Hackathon. When this is run in the script, it outputs something like this:
 
@@ -223,7 +223,18 @@ Loaded the following JSON object:
 
 As a side note, we mention that we override the `meta.globalKey` in posterity to avoid key clashes when creating new contracts from the main script.
 
-2. `convertCDMJsonToAdmlJson` changes the schema from the official CDM to be compatible with the ledger HTTP API. Running this would output the following:
+2. `validateCDMJson` (optional step) sends the dictionary we just parsed to Regnosys' validation REST service. This service needs to be spun up through the [Rosetta core](https://ui.rosetta-technology.io/#/core) web platform, which will provide you with a username and authentication token passed to the `-u` and `-t` arguments of `main.py`. If the service fails to validate, you should see a message like so:
+
+```
+#### Sending model to Rosetta validation service ####
+Rosetta validation failed:
+[{'name': 'Event', 'modelObjectName': 'EventBuilder', 'reason': 'eventIdentifier - Expected cardinality lower bound of [1] found [0]; eventDate - Expected cardinality lower bound of [1] found [0]; action - Expected cardinality lower bound of [1] found [0]', 'type': 'MODEL_INSTANCE', 'path': 'Event'}]
+```
+
+and the program will stop.
+
+
+3. `convertCDMJsonToAdmlJson` changes the schema from the official CDM to be compatible with the ledger HTTP API. Running this would output the following:
 
 ```json
 #### Converting to DAML JSON, wrapping in an 'Event' contract ####
@@ -232,7 +243,9 @@ Resulting JSON object:
 ```
 Although both are JSON, the are subtle differences in how the CDM and DAML are encoded. This simply calls an external library to do this conversion for you. Compare for example, the `timestamp` and `qualification` (last two fields) with the output of step one.
 
-3. `writeDAMLJsonToLedger` uses the `requests` library to make an HTTP POST request to create the contract from the previous section. The command is very simple:
+Note that you can __not__ send DAML JSON to the Regnosys validation service in step #2, and vice-versa, you can not send CDM JSON to the DAML http API. They are incompatible.
+
+4. `writeDAMLJsonToLedger` uses the `requests` library to make an HTTP POST request to create the contract from the previous section. The command is very simple:
 
 ```python
   return requests.post(
@@ -262,7 +275,7 @@ Finally, the `argument` is the DAML-encoded CDM message we created in the previo
 
 This returns an `HttpResponse` object, which is rendered as the HTTP 200 response code, if everything worked ok. If the call fails, you can call `httpCreateResponse.json()` to render and debug the result.
 
-4. `readDAMLJsonFromLedger` is similar to the previous method. Reads the contracts we just generated back from the sandbox. It posts an argument `%templates` to the HTTP endpoint, which can be used to filter specific types of contracts:
+5. `readDAMLJsonFromLedger` is similar to the previous method. Reads the contracts we just generated back from the sandbox. It posts an argument `%templates` to the HTTP endpoint, which can be used to filter specific types of contracts:
 
 ```python
 requests.post(
@@ -278,7 +291,7 @@ requests.post(
     ...
 ```
 
-5. `exerciseChoice` is the final step and is used to exercise the `SayHello` choice on our contract.  Recall this updates the contract identifier to `Hello, ____!` and increments the `version` number. Again, it's very similar to the other HTTP calls. Besides the aforementioned header and meta blocks, it requires a `contractId`, `choice` and `argument` to pass to the DAML choice. In our example, the choice is `SayHello`, and the argument is the greeting message.
+6. `exerciseChoice` is the final step and is used to exercise the `SayHello` choice on our contract.  Recall this updates the contract identifier to `Hello, ____!` and increments the `version` number. Again, it's very similar to the other HTTP calls. Besides the aforementioned header and meta blocks, it requires a `contractId`, `choice` and `argument` to pass to the DAML choice. In our example, the choice is `SayHello`, and the argument is the greeting message.
 
 ```python
   return requests.post(

@@ -31,6 +31,16 @@ def loadCDMFile(fileName):
   with open(fileName) as cdmJsonString:
     return json.load(cdmJsonString)
 
+def validateCDMJson(cdmDict, className, rosettaUsername, rosettaAuthToken):
+ 
+  """Sends a CDM message to the Regnosys validation service, returning HTTP code."""
+
+  return requests.post(
+    f"https://ui.rosetta-technology.io/api/promoted/validation/{rosettaUsername}/derivhack2019/latest/{className}",
+    headers = {"Authorization" : rosettaAuthToken},
+    json = cdmDict
+  )
+
 def convertCDMJsonToDAMLJson(cdmDict):
 
   """Given a CDM dict, convert it into a dict that can be understood by the
@@ -161,6 +171,8 @@ if __name__ == '__main__' :
   parser.add_argument('-d', '--local_dev', action='store_true')
   parser.add_argument('-l', '--ledger_id', type=str, help="The DABL Ledger ID")
   parser.add_argument('-p', '--party_map', type=str, help="Path to a .csv file containing a list of DABL partyName,party,jwt (no header)")
+  parser.add_argument('-u', '--rosetta_user', type=str, help="Rosetta validation service user name.")
+  parser.add_argument('-t', '--rosetta_token', type=str, help="Rosetta validation service authorization token.")
   args = parser.parse_args()
   if not args.local_dev and (not args.ledger_id or not args.party_map):
     parser.error('Please provide a ledger ID and a path to partymap.csv when connecting to DABL')
@@ -187,6 +199,16 @@ if __name__ == '__main__' :
   cdmJson["meta"]["globalKey"] = str(uuid.uuid4()) # We overwrite the globalKey, to avoid DAML key clashes, allowing us to reload the same contract many times.
   print("Loaded the following JSON object:")
   print(cdmJson)
+
+  if (args.rosetta_user and args.rosetta_token):
+    print(f"#### Sending model to Rosetta validation service ####")
+    httpValidateResponse = validateCDMJson(cdmJson, "Event", args.rosetta_user, args.rosetta_token)
+    if httpValidateResponse.status_code != 200 or len(httpValidateResponse.json()) != 0:
+      print("Rosetta validation failed:")
+      print(httpValidateResponse.json())
+      exit(1)
+  else:
+    print("#### Skipping Rosetta validation (provide -u and -t to enable) ####")
 
   print("#### Converting to DAML JSON, wrapping in an 'Transfer' contract ####")
   damlJson = convertCDMJsonToDAMLJson(cdmJson)
