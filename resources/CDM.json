@@ -1,7 +1,7 @@
 {
     "metagen_version": "0.1",
     "format": "CDM",
-    "schema": "CDM_2.4.14",
+    "schema": "CDM_2.5.4",
     "top_level_meta": [],
     "declarations": [
         {

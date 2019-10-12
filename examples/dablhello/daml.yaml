@@ -1,0 +1,10 @@
+sdk-version: 0.13.29
+name: dabl-hello
+source: src/daml
+version: 1.0.0
+parties:
+  - Alice
+  - Bob
+dependencies:
+  - daml-prim
+  - daml-stdlib

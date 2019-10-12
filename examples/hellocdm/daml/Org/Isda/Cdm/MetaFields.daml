@@ -2,7 +2,7 @@ daml 1.2
 
 -- | This file is auto-generated from the ISDA Common
 --   Domain Model, do not edit.
---   @version 2.4.14
+--   @version 2.5.4
 module Org.Isda.Cdm.MetaFields
   ( module Org.Isda.Cdm.MetaFields ) where
 

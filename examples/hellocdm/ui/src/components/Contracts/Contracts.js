@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import ReactJson from "react-json-view";
 import { Grid, Table, TableHead, TableRow, TableCell, TableBody, TextField, Button } from "@material-ui/core";
 import { useStyles } from "./styles";
+import config from "../../config";
 
 export default function Contracts({ contracts, columns, actions=[] }) {
 
   actions = actions ? actions : [];
   const isDefault = !columns;
-  columns = columns ? columns : [ [ "Module", "templateId.moduleName" ], [ "Template", "templateId.entityName" ], [ "ContractId", "contractId" ] ];
+  columns = columns ? columns : (config.isLocalDev
+    ? [ [ "Module", "templateId.moduleName" ], [ "Template", "templateId.entityName" ], [ "ContractId", "contractId" ] ]
+    : [[ "Template", "templateId" ], [ "ContractId", "contractId" ] ]);
 
   const classes = useStyles();
   var [state, setState] = useState({});
@@ -19,12 +22,12 @@ export default function Contracts({ contracts, columns, actions=[] }) {
     const value = getByPath(data[path[0]], path.slice(1));
     return value;
   }
-  
+
   function getValue(data, path) {
     const split = typeof path === "string" && path !== "" ? path.split(".") : [];
     return getByPath(data, split);
   }
-  
+
   return (
     <>
       <Grid container spacing={4}>
